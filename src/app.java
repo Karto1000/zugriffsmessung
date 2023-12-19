@@ -1,30 +1,52 @@
 import database.tables.KontakteTable;
 import models.Kontakt;
-import searching.hashmap.FunctionalKontaktMap;
-import searching.hashmap.ImperativeKontaktMap;
-import searching.list.FunctionalSearchableList;
-import searching.list.ImperativeSearchableList;
+import searching.hashmap.FunctionalMapSearcher;
+import searching.hashmap.ImperativeMapSearcher;
+import searching.list.FunctionalListSearcher;
+import searching.list.ImperativeListSearcher;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class app {
     public static void main(String[] args) {
         // DB lesen und ArrayList erstellen
         KontakteTable kontakteTable = new KontakteTable();
-        ArrayList<Kontakt> kontakte = kontakteTable.getAll();
+        List<Kontakt> kontakte = kontakteTable.getAll();
 
-        FunctionalSearchableList<Kontakt> functionalSearchableList = new FunctionalSearchableList<>(kontakte);
-        ImperativeSearchableList<Kontakt> imperativeSearchableList = new ImperativeSearchableList<>(kontakte);
+        FunctionalListSearcher<Kontakt> functionalListSearcher = new FunctionalListSearcher<>(kontakte);
+        ImperativeListSearcher<Kontakt> imperativeListSearcher = new ImperativeListSearcher<>(kontakte);
 
-        // HashMap initialisieren
-        FunctionalKontaktMap funktionalKontaktMap = new FunctionalKontaktMap();
-        ImperativeKontaktMap imperativKontaktMap = new ImperativeKontaktMap();
+        FunctionalMapSearcher<List<Kontakt>> functionalMapSearcher = new FunctionalMapSearcher<>();
+        ImperativeMapSearcher<List<Kontakt>> imperativeMapSearcher = new ImperativeMapSearcher<>();
 
         // HashMap erstellen - imperativ
-        imperativKontaktMap.loadList(kontakte);
+        imperativeMapSearcher.loadList(
+                kontakte,
+                k -> {
+                    ArrayList<Kontakt> sameNameContact = new ArrayList<>();
+
+                    for (Kontakt otherKontakt : kontakte) {
+                        if (otherKontakt.getName().equals(k.getName())) sameNameContact.add(otherKontakt);
+                    }
+
+                    return sameNameContact;
+                },
+                Kontakt::getName
+        );
 
         // HashMap erstellen - funktional
-        funktionalKontaktMap.loadList(kontakte);
+        functionalMapSearcher.loadList(
+                kontakte,
+                k -> kontakte.stream()
+                        .filter(f -> f
+                                .getName()
+                                .equals(k.getName())
+                        )
+                        .collect(Collectors.toList()),
+                Kontakt::getName
+        );
 
         // DB lesen ohne Index
         System.out.println(kontakteTable.getByName("Doria"));
@@ -33,21 +55,25 @@ public class app {
         System.out.println(kontakteTable.getByIndex("Doria"));
 
         // ArrayList lesen imperativ
-        System.out.println(imperativeSearchableList.search(kontakt -> kontakt.getName().equals("Doria")
+        System.out.println(imperativeListSearcher.search(kontakt -> kontakt.getName().equals("Doria")
                 && kontakt.getVorname().equals("Noelle-Anna")));
 
         // ArrayList lesen funktional
-        System.out.println(functionalSearchableList.search(kontakt -> kontakt.getName().equals("Doria")
+        System.out.println(functionalListSearcher.search(kontakt -> kontakt.getName().equals("Doria")
                 && kontakt.getVorname().equals("Noelle-Anna")));
 
         // HashMap lesen imperativ
-        System.out.println(imperativKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")
-                && kontakt.getVorname().equals("Noelle-Anna")));
+        System.out.println(imperativeMapSearcher.search(v -> {
+            for (Kontakt element : v) {
+                if (element.getName().equals("Doria") && element.getVorname().equals("Noelle-Anna")) {
+                    return true;
+                }
+            }
+            return false;
+        }));
 
         // HashMap lesen funktional
-        System.out.println(funktionalKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")
-                && kontakt.getVorname().equals("Noelle-Anna")));
-
+        System.out.println(functionalMapSearcher.search(v -> v.stream().anyMatch(k -> k.getName().equals("Doria") && k.getVorname().equals("Noelle-Anna"))));
     }
 
 }

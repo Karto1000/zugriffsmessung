@@ -24,7 +24,7 @@ public class KontakteTable {
             .ort((String) record.getValue("ort"))
             .build());
 
-    public ArrayList<Kontakt> getAll() {
+    public List<Kontakt> getAll() {
         return new ArrayList<>(DSL.using(DatabaseConnection.getInstance())
                 .select()
                 .from(TABLE_NAME)
