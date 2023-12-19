@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ImperativeKontaktMap extends HashMap<String, List<Kontakt>> implements Searchable<Kontakt> {
-    public void fromList(List<Kontakt> element) {
+    public void loadList(List<Kontakt> element) {
         for (Kontakt kontakt : element) {
             ArrayList<Kontakt> sameNameContact = new ArrayList<>();
 

@@ -8,7 +8,6 @@ import searching.list.ImperativeSearchableList;
 import java.util.ArrayList;
 
 public class app {
-
     public static void main(String[] args) {
         // DB lesen und ArrayList erstellen
         KontakteTable kontakteTable = new KontakteTable();
@@ -22,12 +21,10 @@ public class app {
         ImperativeKontaktMap imperativKontaktMap = new ImperativeKontaktMap();
 
         // HashMap erstellen - imperativ
-        imperativKontaktMap.fromList(kontakte);
+        imperativKontaktMap.loadList(kontakte);
 
         // HashMap erstellen - funktional
-        funktionalKontaktMap.fromList(kontakte);
-
-        // Eintrag zufällig bestimmen
+        funktionalKontaktMap.loadList(kontakte);
 
         // DB lesen ohne Index
         System.out.println(kontakteTable.getByName("Doria"));
@@ -36,16 +33,20 @@ public class app {
         System.out.println(kontakteTable.getByIndex("Doria"));
 
         // ArrayList lesen imperativ
-        System.out.println(imperativeSearchableList.search(kontakt -> kontakt.getName().equals("Doria")));
+        System.out.println(imperativeSearchableList.search(kontakt -> kontakt.getName().equals("Doria")
+                && kontakt.getVorname().equals("Noelle-Anna")));
 
         // ArrayList lesen funktional
-        System.out.println(functionalSearchableList.search(kontakt -> kontakt.getName().equals("Doria")));
+        System.out.println(functionalSearchableList.search(kontakt -> kontakt.getName().equals("Doria")
+                && kontakt.getVorname().equals("Noelle-Anna")));
 
         // HashMap lesen imperativ
-        System.out.println(imperativKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")));
+        System.out.println(imperativKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")
+                && kontakt.getVorname().equals("Noelle-Anna")));
 
         // HashMap lesen funktional
-        System.out.println(funktionalKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")));
+        System.out.println(funktionalKontaktMap.search(kontakt -> kontakt.getName().equals("Doria")
+                && kontakt.getVorname().equals("Noelle-Anna")));
 
     }
 

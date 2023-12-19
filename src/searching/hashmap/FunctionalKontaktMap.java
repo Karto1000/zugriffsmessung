@@ -1,6 +1,5 @@
 package searching.hashmap;
 
-import database.tables.KontakteTable;
 import models.Kontakt;
 import searching.Searchable;
 
@@ -11,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class FunctionalKontaktMap extends HashMap<String, List<Kontakt>> implements Searchable<Kontakt> {
-    public void fromList(List<Kontakt> element) {
+    public void loadList(List<Kontakt> element) {
         element.forEach(e -> this.put(
                 e.getName(),
                 element.stream()
