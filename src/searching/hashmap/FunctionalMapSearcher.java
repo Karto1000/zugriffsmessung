@@ -24,6 +24,10 @@ public class FunctionalMapSearcher<T> implements Searchable<T> {
         element.forEach(e -> this.map.put(key.apply(e), value.apply(e)));
     }
 
+    public void loadList(List<T> element, Function<T, String> key) {
+        element.forEach(e -> this.map.put(key.apply(e), e));
+    }
+
     @Override
     public List<T> search(Predicate<? super T> predicate) {
         return this.map.values()

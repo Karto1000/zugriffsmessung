@@ -7,6 +7,7 @@ import searching.list.ImperativeListSearcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class app {
@@ -48,24 +49,28 @@ public class app {
                 Kontakt::getName
         );
 
+        // Zufälliger Datensatz bestimmen
+        Random random = new Random();
+        Kontakt randomKontakt = kontakte.get(random.nextInt(kontakte.size() - 1));
+
         // DB lesen ohne Index
-        System.out.println(kontakteTable.getByName("Doria"));
+        System.out.println(kontakteTable.getByName(randomKontakt.getName()));
 
         // DB lesen mit Index
-        System.out.println(kontakteTable.getByIndex("Doria"));
+        System.out.println(kontakteTable.getByIndex(randomKontakt.getName()));
 
         // ArrayList lesen imperativ
-        System.out.println(imperativeListSearcher.search(kontakt -> kontakt.getName().equals("Doria")
-                && kontakt.getVorname().equals("Noelle-Anna")));
+        System.out.println(imperativeListSearcher.search(kontakt -> kontakt.getName().equals(randomKontakt.getName())
+                && kontakt.getVorname().equals(randomKontakt.getVorname())));
 
         // ArrayList lesen funktional
-        System.out.println(functionalListSearcher.search(kontakt -> kontakt.getName().equals("Doria")
-                && kontakt.getVorname().equals("Noelle-Anna")));
+        System.out.println(functionalListSearcher.search(kontakt -> kontakt.getName().equals(randomKontakt.getName())
+                && kontakt.getVorname().equals(randomKontakt.getVorname())));
 
         // HashMap lesen imperativ
         System.out.println(imperativeMapSearcher.search(v -> {
             for (Kontakt element : v) {
-                if (element.getName().equals("Doria") && element.getVorname().equals("Noelle-Anna")) {
+                if (element.getName().equals(randomKontakt.getName()) && element.getVorname().equals(randomKontakt.getVorname())) {
                     return true;
                 }
             }
@@ -73,7 +78,7 @@ public class app {
         }));
 
         // HashMap lesen funktional
-        System.out.println(functionalMapSearcher.search(v -> v.stream().anyMatch(k -> k.getName().equals("Doria") && k.getVorname().equals("Noelle-Anna"))));
+        System.out.println(functionalMapSearcher.search(v -> v.stream().anyMatch(k -> k.getName().equals(randomKontakt.getName()) && k.getVorname().equals(randomKontakt.getVorname()))));
     }
 
 }

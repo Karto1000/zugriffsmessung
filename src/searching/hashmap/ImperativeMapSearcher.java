@@ -21,7 +21,15 @@ public class ImperativeMapSearcher<T> implements Searchable<T> {
     }
 
     public <U> void loadList(List<U> element, Function<U, T> value, Function<U, String> key) {
-        element.forEach(e -> this.map.put(key.apply(e), value.apply(e)));
+        for (U e : element) {
+            this.map.put(key.apply(e), value.apply(e));
+        }
+    }
+
+    public void loadList(List<T> element, Function<T, String> key) {
+        for (T e : element) {
+            this.map.put(key.apply(e), e);
+        }
     }
 
     @Override
