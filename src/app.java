@@ -32,6 +32,13 @@ public class app {
     }
 
     /**
+     * <strong>Falls
+     * Die Datenbank Verbindung nicht funktioniert kann man den Connectionstring in der
+     * {@link database.DatabaseConnection}
+     * Klasse Anpassen
+     * </strong>
+     *
+     * <p>
      * <strong>DB lesen und ArrayList erstellen </strong>
      * <ul>
      * <li>{@link database.tables.KontakteTable}</li>
@@ -92,13 +99,13 @@ public class app {
         KontakteTable kontakteTable = new KontakteTable();
         List<Kontakt> kontakte = measure("Reading Data from Database", kontakteTable::getAll);
 
-        // [Sucher Erstellen Funktional]
+        // [Liste / Sucher erstellen Funktional]
         FunctionalListSearcher<Kontakt> functionalListSearcher = new FunctionalListSearcher<>(kontakte);
 
-        // [Sucher Erstellen Imperativ]
+        // [Liste / Sucher erstellen Imperativ]
         ImperativeListSearcher<Kontakt> imperativeListSearcher = new ImperativeListSearcher<>(kontakte);
 
-        // [HashMap Erstellen Imperativ]
+        // [HashMap erstellen Imperativ]
         ImperativeMapSearcher<List<Kontakt>> imperativeMapSearcher = measure("Loading Imperative Map", () -> {
             HashMap<String, List<Kontakt>> hashMap = new HashMap<>();
 
@@ -115,7 +122,7 @@ public class app {
             return new ImperativeMapSearcher<>(hashMap);
         });
 
-        // [HashMap Erstellen Funktional]
+        // [HashMap erstellen Funktional]
         FunctionalMapSearcher<List<Kontakt>> functionalMapSearcher = measure("Loading Function Map", () -> {
             HashMap<String, List<Kontakt>> hashMap = new HashMap<>();
 
