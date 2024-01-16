@@ -9,7 +9,7 @@ import org.jooq.impl.DSL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table<T> {
+public abstract class Table<T> {
     private final String tableName;
     private final RecordMapper<Record, T> recordMapper;
 
@@ -21,10 +21,9 @@ public class Table<T> {
     public List<T> readGeneric(Condition... conditions) {
         return new ArrayList<>(DSL.using(DatabaseConnection.getInstance())
                 .select()
-                // TODO REVISIT
                 .from(tableName)
                 .where(conditions)
-                .limit(10)
+                .limit(50000)
                 .fetch()
                 .map(recordMapper)
         );
@@ -33,9 +32,8 @@ public class Table<T> {
     public List<T> readGeneric() {
         return new ArrayList<>(DSL.using(DatabaseConnection.getInstance())
                 .select()
-                // TODO REVISIT
                 .from(tableName)
-                .limit(10)
+                .limit(50000)
                 .fetch()
                 .map(recordMapper)
         );
